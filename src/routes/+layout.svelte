@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { getUser, signout } from '$lib/api/auth.remote';
+	import { getUser, signOut } from '$lib/api/auth.remote';
 	import favicon from '$lib/assets/favicon.svg';
 	import '$lib/assets/pico.fuchsia.min.css';
 
@@ -18,12 +18,18 @@
 		<ul><li><a href={resolve('/')}>Set Solver</a></li></ul>
 		{#if user}
 			<ul>
-				<li>Signed in as <strong>{user.email}</strong></li>
-				<li><form {...signout}><button class="secondary outline">Sign out</button></form></li>
+				<li>Signed in as <a class="secondary" href={resolve('/profile')}>{user.email}</a></li>
+				<li>
+					<form {...signOut}>
+						<button class="secondary outline">Sign out</button>
+					</form>
+				</li>
 			</ul>
 		{:else}
 			<ul>
-				<li><a href={resolve('/signin')}>Sign in</a></li>
+				<li>
+					<a class="secondary outline" href={resolve('/signin')} role="button">Sign in</a>
+				</li>
 			</ul>
 		{/if}
 	</nav>
@@ -38,6 +44,10 @@
 		position: sticky;
 		top: 0;
 		background-color: var(--pico-background-color);
+
+		li a[role='button'] {
+			display: table-cell;
+		}
 	}
 
 	main {

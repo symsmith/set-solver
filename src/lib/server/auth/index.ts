@@ -7,5 +7,6 @@ import { sveltekitCookies } from 'better-auth/svelte-kit';
 export const auth = betterAuth({
 	database: drizzleAdapter(db, { provider: 'sqlite' }),
 	plugins: [sveltekitCookies(getRequestEvent)],
+	user: { changeEmail: { enabled: true } },
 	emailAndPassword: { enabled: true, requireEmailVerification: false }
 });

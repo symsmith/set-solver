@@ -1,39 +1,9 @@
 import { resolve } from '$app/paths';
 import { form, getRequestEvent, query } from '$app/server';
-import { minDelay } from '$lib/api/utils';
+import { baseForm, getHeaders, minDelay } from '$lib/api/utils';
 import { auth } from '$lib/server/auth';
-import { signinFormSchema, signupFormSchema } from '$lib/shared/schemas/auth';
+import { signinFormSchema, signupFormSchema, updateUserFormSchema } from '$lib/shared/schemas/auth';
 import { redirect } from '@sveltejs/kit';
-import { APIError } from 'better-auth';
-
-export const signup = form(
-	signupFormSchema,
-	minDelay(async (body) => {
-		try {
-			await auth.api.signUpEmail({ body: { ...body, name: body.email, password: body._password } });
-		} catch (e) {
-			if (e instanceof APIError) {
-				return { error: e.message };
-			} else {
-				console.log(e);
-				return { error: 'An error occured while signing up' };
-			}
-		}
-	})
-);
-
-export const signin = form(signinFormSchema, async (body) => {
-	try {
-		await auth.api.signInEmail({ body: { ...body, password: body._password } });
-	} catch (e) {
-		console.log(e);
-		return { error: 'An error occured while signing in' };
-	}
-});
-
-export const signout = form(async () => {
-	await auth.api.signOut({ headers: getRequestEvent().request.headers });
-});
 
 export const getUser = query(async () => {
 	return getRequestEvent().locals.user;
@@ -50,3 +20,61 @@ export const needsAnon = query(async () => {
 		redirect(307, resolve('/'));
 	}
 });
+export const signUp = form(
+	signupFormSchema,
+	minDelay(
+		baseForm(async (body) => {
+			await needsAnon();
+			await auth.api.signUpEmail({
+				body: { ...body, name: body.email, password: body._password }
+			});
+		})
+	)
+);
+
+export const signIn = form(
+	signinFormSchema,
+	baseForm(async (body) => {
+		await needsAnon();
+		await auth.api.signInEmail({ body: { ...body, password: body._password } });
+	})
+);
+
+export const signOut = form(async () => {
+	await auth.api.signOut({ headers: getHeaders() });
+});
+
+export const updateUser = form(
+	updateUserFormSchema,
+	minDelay(
+		baseForm(async (body) => {
+			await needsAuth();
+			const user = (await getUser())!;
+
+			// update username
+			if (user.name !== body.name) {
+				await auth.api.updateUser({
+					body: { name: body.name },
+					headers: getHeaders()
+				});
+			}
+
+			// update email
+			if (user.email !== body.email) {
+				await auth.api.changeEmail({ body: { newEmail: body.email } });
+			}
+
+			// update password
+			if (body._newPassword !== '') {
+				await auth.api.changePassword({
+					body: {
+						currentPassword: body._currentPassword,
+						newPassword: body._newPassword,
+						revokeOtherSessions: true
+					},
+					headers: getHeaders()
+				});
+			}
+		})
+	)
+);
