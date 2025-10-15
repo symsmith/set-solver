@@ -9,15 +9,25 @@
 	const {
 		form,
 		schema,
+		resetOnSuccess,
 		children
 	}: {
 		form: RemoteForm<Input, RemoteFormReturn>;
 		schema: StandardSchemaV1<Input, SchemaOutput>;
+		resetOnSuccess?: boolean;
 		children: Snippet;
 	} = $props();
 </script>
 
-<form {...form.preflight(schema).enhance(({ submit }) => submit())}>
+<form
+	{...form.preflight(schema).enhance(async ({ submit, form }) => {
+		await submit();
+		if (resetOnSuccess) {
+			form.reset();
+		}
+	})}
+	enctype="multipart/form-data"
+>
 	<ErrorNotice>
 		{form.result?.error}
 	</ErrorNotice>
