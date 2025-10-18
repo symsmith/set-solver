@@ -8,12 +8,9 @@
 <FormCard>
 	<h1>Upload your set</h1>
 	<Form form={solve} schema={solveFormSchema} resetOnSuccess>
-		<label for="image">
-			Photo of the set
-			<input {...solve.fields.image.as('file')} id="image" />
-			<small>{solve.fields.image.issues()?.[0]?.message}</small>
-		</label>
-		<button aria-busy={!!solve.pending}>Solve</button>
+		<input {...solve.fields.image.as('file')} />
+		<small>{solve.fields.image.issues()?.[0]?.message}</small>
+		<button aria-busy={!!solve.pending}>Check</button>
 	</Form>
 </FormCard>
 

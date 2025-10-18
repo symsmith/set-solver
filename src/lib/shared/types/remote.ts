@@ -1,6 +1,6 @@
-export type RemoteFormReturn =
+export type RemoteFormReturn<T> =
 	| {
-			success: boolean;
+			success: T;
 			error?: undefined;
 	  }
 	| {

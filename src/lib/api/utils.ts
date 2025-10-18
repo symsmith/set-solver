@@ -13,13 +13,13 @@ export function getHeaders() {
 
 const errorSchema = v.object({ message: v.pipe(v.string(), v.nonEmpty()) });
 
-export function baseForm<Input>(
-	handler: (input: Input) => Promise<unknown>
-): (input: Input) => Promise<RemoteFormReturn> {
+export function baseForm<Input, Return = void>(
+	handler: (input: Input) => Promise<Return>
+): (input: Input) => Promise<RemoteFormReturn<Return>> {
 	return async (input) => {
 		try {
-			await handler(input);
-			return { success: true };
+			const result = await handler(input);
+			return { success: result };
 		} catch (e) {
 			if (isRedirect(e)) {
 				throw e;
@@ -47,4 +47,33 @@ export function minDelay<Input, Return>(
 		}
 		return result;
 	};
+}
+
+export async function getBase64FromFile(file: File) {
+	const imageReader = file.stream().getReader();
+	const chunks: Uint8Array[] = [];
+	let totalLength = 0;
+
+	while (true) {
+		const { done, value } = await imageReader.read();
+		if (done) break;
+
+		chunks.push(value);
+		totalLength += value.length;
+	}
+
+	// Combine all chunks into a single Uint8Array
+	const imageDataU8 = new Uint8Array(totalLength);
+	let offset = 0;
+	for (const chunk of chunks) {
+		imageDataU8.set(chunk, offset);
+		offset += chunk.length;
+	}
+
+	// Convert to base64
+	let binary = '';
+	for (let i = 0; i < imageDataU8.length; i++) {
+		binary += String.fromCharCode(imageDataU8[i]!);
+	}
+	return btoa(binary);
 }

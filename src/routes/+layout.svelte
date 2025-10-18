@@ -2,7 +2,7 @@
 	import { resolve } from '$app/paths';
 	import { getUser, signOut } from '$lib/api/auth.remote';
 	import favicon from '$lib/assets/favicon.svg';
-	import '$lib/assets/pico.fuchsia.min.css';
+	import '$lib/assets/pico.violet.min.css';
 
 	let { children } = $props();
 

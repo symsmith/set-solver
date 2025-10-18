@@ -12,7 +12,7 @@
 		resetOnSuccess,
 		children
 	}: {
-		form: RemoteForm<Input, RemoteFormReturn>;
+		form: RemoteForm<Input, RemoteFormReturn<unknown>>;
 		schema: StandardSchemaV1<Input, SchemaOutput>;
 		resetOnSuccess?: boolean;
 		children: Snippet;
@@ -32,7 +32,7 @@
 		{form.result?.error}
 	</ErrorNotice>
 	<SuccessNotice>
-		{form.result?.success ? 'Success!' : ''}
+		{form.result && !form.result?.error ? 'Success!' : ''}
 	</SuccessNotice>
 	{@render children()}
 </form>
