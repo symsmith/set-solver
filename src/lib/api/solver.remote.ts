@@ -8,8 +8,8 @@ export const solve = form(
 	minDelay(
 		baseForm(async ({ image }) => {
 			const base64 = await getBase64FromFile(image);
-			const result = await describeSetGame(base64);
-			return result;
+			const cards = await describeSetGame(base64);
+			return { image: base64, cards };
 		})
 	)
 );
