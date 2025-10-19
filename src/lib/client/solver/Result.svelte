@@ -1,10 +1,13 @@
 <script lang="ts">
 	import Card from '$lib/client/solver/Card.svelte';
+	import { getSets } from '$lib/client/solver/solve';
 	import type { Card as CardType } from '$lib/shared/types/solver';
 
 	const { cards: generatedCards, image }: { cards: CardType[]; image: string } = $props();
 
 	let cards = $state(generatedCards);
+
+	$inspect(getSets(cards));
 </script>
 
 <article>
@@ -19,6 +22,10 @@
 			{/each}
 		</div>
 	</div>
+</article>
+
+<article class="result">
+	<h1>No set found</h1>
 </article>
 
 <style>
@@ -48,5 +55,9 @@
 			gap: calc(var(--pico-spacing) / 2);
 			grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 		}
+	}
+
+	.result h1 {
+		margin: 0;
 	}
 </style>

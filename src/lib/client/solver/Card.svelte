@@ -1,5 +1,11 @@
 <script lang="ts">
 	import Setting from '$lib/client/solver/Setting.svelte';
+	import {
+		getNextColor,
+		getNextCount,
+		getNextFilling,
+		getNextShape
+	} from '$lib/client/solver/solve';
 	import type { Card } from '$lib/shared/types/solver';
 
 	const { card, onchange }: { card: Card; onchange: (newCard: Card) => void } = $props();
@@ -15,39 +21,6 @@
 	const color = $derived(card.color === 'purple' ? 'blue' : card.color);
 
 	const imgUrl = $derived(`https://smart-games.org/images/${shape}_${filling}_${color}.png`);
-
-	function getNextColor(color: Card['color']): Card['color'] {
-		switch (color) {
-			case 'green':
-				return 'purple';
-			case 'purple':
-				return 'red';
-			default:
-				return 'green';
-		}
-	}
-
-	function getNextShape(shape: Card['shape']): Card['shape'] {
-		switch (shape) {
-			case 'diamond':
-				return 'pill';
-			case 'pill':
-				return 'wave';
-			default:
-				return 'diamond';
-		}
-	}
-
-	function getNextFilling(filling: Card['filling']): Card['filling'] {
-		switch (filling) {
-			case 'empty':
-				return 'striped';
-			case 'striped':
-				return 'full';
-			default:
-				return 'empty';
-		}
-	}
 </script>
 
 {#if showSettings}
@@ -56,7 +29,7 @@
 		<Setting
 			label="Count"
 			current={card.count}
-			onchange={() => onchange({ ...card, count: ((card.count % 3) + 1) as Card['count'] })}
+			onchange={() => onchange({ ...card, count: getNextCount(card.count) })}
 		/>
 		<Setting
 			label="Color"
