@@ -8,7 +8,8 @@ const mistral = createMistral({
 	apiKey: MISTRAL_API_KEY
 });
 
-const provider = mistral('mistral-large-latest');
+const visionProvider = mistral('pixtral-large-latest');
+const objectProvider = mistral('mistral-large-latest');
 
 async function retryGeneration<T>(fn: () => Promise<T>, maxRetries = 2) {
 	try {
@@ -27,7 +28,7 @@ async function retryGeneration<T>(fn: () => Promise<T>, maxRetries = 2) {
 async function getGameDescription(image: string) {
 	return (
 		await generateText({
-			model: provider,
+			model: visionProvider,
 			temperature: 0,
 			abortSignal: AbortSignal.timeout(30_000),
 			system:
@@ -47,7 +48,7 @@ async function getCardsFromGameDescription(description: string) {
 		async () =>
 			(
 				await generateObject({
-					model: provider,
+					model: objectProvider,
 					schema: valibotSchema(setDescriptionSchema),
 					output: 'array',
 					temperature: 0,

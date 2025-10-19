@@ -8,7 +8,7 @@
 	} from '$lib/client/solver/solve';
 	import type { Card } from '$lib/shared/types/solver';
 
-	const { card, onchange }: { card: Card; onchange: (newCard: Card) => void } = $props();
+	const { card, onchange }: { card: Card; onchange?: (newCard: Card) => void } = $props();
 
 	let showSettings = $state(false);
 
@@ -29,22 +29,22 @@
 		<Setting
 			label="Count"
 			current={card.count}
-			onchange={() => onchange({ ...card, count: getNextCount(card.count) })}
+			onchange={() => onchange?.({ ...card, count: getNextCount(card.count) })}
 		/>
 		<Setting
 			label="Color"
 			current={card.color}
-			onchange={() => onchange({ ...card, color: getNextColor(card.color) })}
+			onchange={() => onchange?.({ ...card, color: getNextColor(card.color) })}
 		/>
 		<Setting
 			label="Shape"
 			current={card.shape}
-			onchange={() => onchange({ ...card, shape: getNextShape(card.shape) })}
+			onchange={() => onchange?.({ ...card, shape: getNextShape(card.shape) })}
 		/>
 		<Setting
 			label="Filling"
 			current={card.filling}
-			onchange={() => onchange({ ...card, filling: getNextFilling(card.filling) })}
+			onchange={() => onchange?.({ ...card, filling: getNextFilling(card.filling) })}
 		/>
 	</div>
 {:else}
@@ -53,6 +53,7 @@
 		type="button"
 		onclick={() => (showSettings = true)}
 		data-settings={showSettings}
+		disabled={!onchange}
 	>
 		{#each { length: card.count } as _, i (i)}
 			<img src={imgUrl} alt="{card.color} {card.filling} {card.shape}" />
@@ -74,6 +75,11 @@
 		padding: 15% 10%;
 		gap: calc(var(--pico-spacing) / 2);
 		border: solid 1px var(--pico-secondary);
+
+		&[disabled] {
+			opacity: 1;
+			cursor: default;
+		}
 
 		&[data-settings='true'] {
 			padding: 5%;

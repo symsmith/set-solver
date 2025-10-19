@@ -7,7 +7,7 @@
 
 	let cards = $state(generatedCards);
 
-	$inspect(getSets(cards));
+	const sets = $derived(getSets(cards));
 </script>
 
 <article>
@@ -25,7 +25,25 @@
 </article>
 
 <article class="result">
-	<h1>No set found</h1>
+	<h1>
+		{#if sets.length}
+			{sets.length} set{sets.length > 1 ? 's' : ''} found
+			<small>Click to highlight in the game</small>
+		{:else}
+			No set found
+		{/if}
+	</h1>
+	{#if sets.length}
+		<ul>
+			{#each sets as set}
+				<li>
+					{#each set.sort((a, b) => a.count - b.count) as card}
+						<Card {card} />
+					{/each}
+				</li>
+			{/each}
+		</ul>
+	{/if}
 </article>
 
 <style>
@@ -57,7 +75,19 @@
 		}
 	}
 
-	.result h1 {
+	.result h1:not(:has(+ *)) {
 		margin: 0;
+	}
+
+	.result ul {
+		display: grid;
+		gap: var(--pico-spacing);
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+		li {
+			display: grid;
+			grid-template-columns: repeat(3, 100px);
+			gap: calc(var(--pico-spacing) / 2);
+		}
 	}
 </style>

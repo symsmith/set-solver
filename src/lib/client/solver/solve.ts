@@ -86,19 +86,34 @@ function findCard(card: Card, cards: Card[]) {
 	return cards.find((c) => isSameCard(card, c));
 }
 
+type Set = [Card, Card, Card];
+
+function findSet(set: Set, sets: Set[]) {
+	return sets.find((s) => set.every((card) => findCard(card, s)));
+}
+
 export function getSets(cards: Card[]) {
-	const sets: [Card, Card, Card][] = [];
+	const sets: Set[] = [];
 	for (let i = 0; i < cards.length; i++) {
 		const card1 = cards[i];
 		for (let j = i + 1; j < cards.length; j++) {
 			const card2 = cards[j];
-			if (card1 && card2) {
-				const card3 = getRemainingCardForSet(card1, card2);
-				const card3InCards = findCard(card3, cards);
-				if (!isSameCard(card1, card3) && card3InCards) {
-					sets.push([card1, card2, card3InCards]);
-				}
+			if (!card1 || !card2) {
+				continue;
 			}
+
+			const card3 = getRemainingCardForSet(card1, card2);
+			const card3InCards = findCard(card3, cards);
+			if (isSameCard(card1, card3) || !card3InCards) {
+				continue;
+			}
+
+			const set: Set = [card1, card2, card3InCards];
+			if (findSet(set, sets)) {
+				continue;
+			}
+
+			sets.push(set);
 		}
 	}
 	return sets;
