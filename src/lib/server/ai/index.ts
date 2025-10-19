@@ -32,7 +32,7 @@ async function getGameDescription(image: string) {
 			temperature: 0,
 			abortSignal: AbortSignal.timeout(30_000),
 			system:
-				'Generate a description of the cards in the image. For example, one card can have two full purple pills. Another example: three striped red diamonds. Another example: one empty green wave. Describe each card with their position (row and column, 0-based). If the center of the items in a card are not definitely white, you should set its filling to `striped`. Choose the color closest to the available options (for example if you see blue, say purple). Clearly describe each card in the image.',
+				'Generate a description of the cards in the image. For example, one card can have two full purple pills. Another example: three striped red diamonds. Another example: one empty green wave. If the center of the items in a card are not definitely white, you should say its filling is `striped`. If the center of the items in a card are clearly white, say its filling is `empty`. If it is a vivid color, say it is `full`. Choose the color closest to the available options (for example if you see blue, say purple). Clearly describe each card in the image. Describe the cards in the reading order, left to right and top to bottom.',
 			prompt: [
 				{
 					role: 'user',

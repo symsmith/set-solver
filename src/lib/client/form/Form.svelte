@@ -12,7 +12,7 @@
 		resetOnSuccess,
 		children
 	}: {
-		form: RemoteForm<Input, RemoteFormReturn<unknown>>;
+		form: Omit<RemoteForm<Input, RemoteFormReturn<unknown>>, 'for'>;
 		schema: StandardSchemaV1<Input, SchemaOutput>;
 		resetOnSuccess?: boolean;
 		children: Snippet;

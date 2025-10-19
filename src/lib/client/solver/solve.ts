@@ -62,10 +62,8 @@ function getLastSetting<T extends CardSetting>(setting: T, card1: Card, card2: C
 	return next1;
 }
 
-function getRemainingCardForSet(card1: Card, card2: Card): Card {
+function getLastCardForSet(card1: Card, card2: Card): Card {
 	return {
-		column: -1,
-		row: -1,
 		color: getLastSetting('color', card1, card2),
 		count: getLastSetting('count', card1, card2),
 		filling: getLastSetting('filling', card1, card2),
@@ -110,7 +108,7 @@ export function getSets(cards: Card[]) {
 				continue;
 			}
 
-			const card3 = getRemainingCardForSet(card1, card2);
+			const card3 = getLastCardForSet(card1, card2);
 			const card3InCards = findCard(card3, cards);
 			if (isSameCard(card1, card3) || !card3InCards) {
 				continue;

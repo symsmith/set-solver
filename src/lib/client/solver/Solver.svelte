@@ -1,9 +1,14 @@
-<script>
-	import { solve } from '$lib/api/solver.remote';
+<script lang="ts">
+	import { solve as baseSolve } from '$lib/api/solver.remote';
 	import Form from '$lib/client/form/Form.svelte';
 	import FormCard from '$lib/client/form/FormCard.svelte';
+	import { getSolverContext, setSolverContext, Solver } from '$lib/client/solver/context.svelte';
 	import Result from '$lib/client/solver/Result.svelte';
 	import { solveFormSchema } from '$lib/shared/schemas/solver';
+
+	setSolverContext(new Solver());
+
+	const solve = $derived(baseSolve.for(getSolverContext().formId));
 </script>
 
 {#if solve.result?.success}

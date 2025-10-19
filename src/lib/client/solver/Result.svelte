@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Card from '$lib/client/solver/Card.svelte';
+	import { getSolverContext } from '$lib/client/solver/context.svelte';
 	import { findCard, getSets, isSameSet, isSetInCards, type Set } from '$lib/client/solver/solve';
 	import type { Card as CardType } from '$lib/shared/types/solver';
 
@@ -9,7 +10,17 @@
 	let highlightedSet: Set | null = $state(null);
 
 	const sets = $derived(getSets(cards));
+
+	let context = getSolverContext();
 </script>
+
+<button
+	type="button"
+	class="secondary"
+	onclick={() => {
+		context.formId += 1;
+	}}>Upload another game</button
+>
 
 <article>
 	<h1>Are all the cards there? <small>Click on the cards to fix issues</small></h1>

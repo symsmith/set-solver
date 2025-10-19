@@ -43,14 +43,16 @@
 		"@ai-sdk/mistral": "^2.0.19",
 		"@ai-sdk/valibot": "^1.0.12",
 		"ai": "^5.0.76",
-		"better-auth": "^1.3.27",
+		"better-auth": "^1.3.28",
 		"better-sqlite3": "^12.4.1",
+		"sharp": "^0.34.4",
 		"valibot": "^1.1.0"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
+			"better-sqlite3",
 			"esbuild",
-			"better-sqlite3"
+			"sharp"
 		]
 	}
 }
