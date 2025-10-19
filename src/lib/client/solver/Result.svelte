@@ -12,7 +12,7 @@
 </script>
 
 <article>
-	<h1>Does this look right? <small>Click on the cards to fix issues</small></h1>
+	<h1>Are all the cards there? <small>Click on the cards to fix issues</small></h1>
 	<div class="comparison">
 		<div class="image">
 			<img src="data:image/png;base64,{image}" alt="" />
@@ -68,6 +68,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: var(--pico-spacing);
+		align-items: flex-start;
 
 		.image {
 			flex: 1;
@@ -94,6 +95,7 @@
 		display: grid;
 		gap: var(--pico-spacing);
 		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		justify-content: center;
 		padding: 0;
 		margin: 0;
 
@@ -101,6 +103,8 @@
 			list-style-type: none;
 			padding: 0;
 			margin: 0;
+			display: flex;
+			justify-content: center;
 
 			button {
 				display: grid;

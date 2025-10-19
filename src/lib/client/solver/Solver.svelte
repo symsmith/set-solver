@@ -10,7 +10,7 @@
 	<Result cards={solve.result.success.cards} image={solve.result.success.image} />
 {:else}
 	<FormCard>
-		<h1>Upload your set</h1>
+		<h1>Upload your game</h1>
 		<Form form={solve} schema={solveFormSchema} resetOnSuccess>
 			<input {...solve.fields.image.as('file')} />
 			<small>{solve.fields.image.issues()?.[0]?.message}</small>
