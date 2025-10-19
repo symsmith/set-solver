@@ -8,7 +8,15 @@
 	} from '$lib/client/solver/solve';
 	import type { Card } from '$lib/shared/types/solver';
 
-	const { card, onchange }: { card: Card; onchange?: (newCard: Card) => void } = $props();
+	const {
+		card,
+		onchange,
+		highlighted = false
+	}: {
+		card: Card;
+		onchange?: (newCard: Card) => void;
+		highlighted?: boolean;
+	} = $props();
 
 	let showSettings = $state(false);
 
@@ -24,8 +32,8 @@
 </script>
 
 {#if showSettings}
-	<div class="card" data-settings={showSettings}>
-		<button class="close" type="button" onclick={() => (showSettings = false)}>close</button>
+	<div class="card" data-settings={showSettings} data-highlighted={highlighted}>
+		<button class="close" type="button" onclick={() => (showSettings = false)}>done</button>
 		<Setting
 			label="Count"
 			current={card.count}
@@ -54,6 +62,7 @@
 		onclick={() => (showSettings = true)}
 		data-settings={showSettings}
 		disabled={!onchange}
+		data-highlighted={highlighted}
 	>
 		{#each { length: card.count } as _, i (i)}
 			<img src={imgUrl} alt="{card.color} {card.filling} {card.shape}" />
@@ -81,6 +90,11 @@
 			cursor: default;
 		}
 
+		&[data-highlighted='true'] {
+			outline: 2px solid var(--pico-primary);
+			outline-offset: 2px;
+		}
+
 		&[data-settings='true'] {
 			padding: 5%;
 			gap: calc(var(--pico-spacing) / 4);
@@ -88,17 +102,15 @@
 
 			.close {
 				position: absolute;
-				right: 5%;
-				top: 0;
+				right: 0.3rem;
+				top: 0.3rem;
 				padding: 0;
-				background-color: transparent;
+				padding-inline: 3px;
+				background-color: white;
 				border: none;
 				color: var(--pico-primary);
 				font-size: 0.6rem;
-
-				&:hover {
-					text-decoration: underline;
-				}
+				box-shadow: 0 0 0 1px var(--pico-secondary);
 			}
 		}
 	}

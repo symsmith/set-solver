@@ -41,8 +41,6 @@
 
 <style>
 	nav {
-		position: sticky;
-		top: 0;
 		background-color: var(--pico-background-color);
 
 		li a[role='button'] {

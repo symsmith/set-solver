@@ -19,6 +19,7 @@
 	div {
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 	}
 
 	small {
@@ -29,13 +30,9 @@
 	button {
 		margin: 0;
 		padding: 0;
-		background-color: transparent;
+		padding-inline: 0.2rem;
 		border: none;
-		color: var(--pico-primary);
+		min-width: 1rem;
 		font-size: 0.7rem;
-
-		&:hover {
-			text-decoration: underline;
-		}
 	}
 </style>

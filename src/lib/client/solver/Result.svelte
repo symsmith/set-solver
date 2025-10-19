@@ -1,11 +1,12 @@
 <script lang="ts">
 	import Card from '$lib/client/solver/Card.svelte';
-	import { getSets } from '$lib/client/solver/solve';
+	import { findCard, getSets, isSameSet, isSetInCards, type Set } from '$lib/client/solver/solve';
 	import type { Card as CardType } from '$lib/shared/types/solver';
 
 	const { cards: generatedCards, image }: { cards: CardType[]; image: string } = $props();
 
 	let cards = $state(generatedCards);
+	let highlightedSet: Set | null = $state(null);
 
 	const sets = $derived(getSets(cards));
 </script>
@@ -18,7 +19,11 @@
 		</div>
 		<div class="cards">
 			{#each cards as card, i}
-				<Card {card} onchange={(card) => (cards[i] = card)} />
+				{@const isHighlighted =
+					!!highlightedSet &&
+					isSetInCards(highlightedSet, cards) &&
+					!!findCard(card, highlightedSet)}
+				<Card {card} onchange={(card) => (cards[i] = card)} highlighted={isHighlighted} />
 			{/each}
 		</div>
 	</div>
@@ -36,10 +41,16 @@
 	{#if sets.length}
 		<ul>
 			{#each sets as set}
+				{@const isSelected = highlightedSet && isSameSet(set, highlightedSet)}
 				<li>
-					{#each set.sort((a, b) => a.count - b.count) as card}
-						<Card {card} />
-					{/each}
+					<button
+						onclick={() => (highlightedSet = isSelected ? null : set)}
+						data-selected={isSelected}
+					>
+						{#each set.sort((a, b) => a.count - b.count) as card}
+							<Card {card} />
+						{/each}
+					</button>
 				</li>
 			{/each}
 		</ul>
@@ -83,11 +94,32 @@
 		display: grid;
 		gap: var(--pico-spacing);
 		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		padding: 0;
+		margin: 0;
 
 		li {
-			display: grid;
-			grid-template-columns: repeat(3, 100px);
-			gap: calc(var(--pico-spacing) / 2);
+			list-style-type: none;
+			padding: 0;
+			margin: 0;
+
+			button {
+				display: grid;
+				grid-template-columns: repeat(3, 100px);
+				gap: calc(var(--pico-spacing) / 2);
+				background-color: transparent;
+				padding: 0;
+				margin: 0;
+				border: none;
+
+				&[data-selected='true'] {
+					outline: 2px solid var(--pico-primary);
+					outline-offset: 2px;
+
+					&:focus {
+						box-shadow: none;
+					}
+				}
+			}
 		}
 	}
 </style>

@@ -82,14 +82,22 @@ function isSameCard(card1: Card, card2: Card) {
 	);
 }
 
-function findCard(card: Card, cards: Card[]) {
+export function findCard(card: Card, cards: Card[]) {
 	return cards.find((c) => isSameCard(card, c));
 }
 
-type Set = [Card, Card, Card];
+export type Set = [Card, Card, Card];
+
+export function isSameSet(set1: Set, set2: Set) {
+	return set1.every((card) => findCard(card, set2));
+}
 
 function findSet(set: Set, sets: Set[]) {
-	return sets.find((s) => set.every((card) => findCard(card, s)));
+	return sets.find((s) => isSameSet(s, set));
+}
+
+export function isSetInCards(set: Set, cards: Card[]) {
+	return set.every((c) => findCard(c, cards));
 }
 
 export function getSets(cards: Card[]) {
