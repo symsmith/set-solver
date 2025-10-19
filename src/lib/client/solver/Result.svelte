@@ -2,38 +2,32 @@
 	import Card from '$lib/client/solver/Card.svelte';
 	import type { Card as CardType } from '$lib/shared/types/solver';
 
-	const { cards, image }: { cards: CardType[]; image: string } = $props();
+	const { cards: generatedCards, image }: { cards: CardType[]; image: string } = $props();
 
-	const columns = $derived(
-		(cards
-			.filter((c) => c.row === 0)
-			.sort((a, b) => a.column - b.column)
-			.at(-1)?.column ?? 0) + 1
-	);
-	$inspect(columns);
+	let cards = $state(generatedCards);
 </script>
 
 <article>
-	<h1>Does this look right?</h1>
+	<h1>Does this look right? <small>Click on the cards to fix issues</small></h1>
 	<div class="comparison">
 		<div class="image">
 			<img src="data:image/png;base64,{image}" alt="" />
 		</div>
-		<div
-			class="cards"
-			style="grid-template-columns:{new Array(columns)
-				.fill(0)
-				.map(() => '1fr')
-				.join(' ')}"
-		>
-			{#each cards as card (`${card.row}-${card.column}`)}
-				<Card {card} />
+		<div class="cards">
+			{#each cards as card, i}
+				<Card {card} onchange={(card) => (cards[i] = card)} />
 			{/each}
 		</div>
 	</div>
 </article>
 
 <style>
+	h1 small {
+		font-size: 1rem;
+		font-weight: normal;
+		color: var(--pico-secondary);
+	}
+
 	.comparison {
 		display: flex;
 		flex-wrap: wrap;
@@ -52,6 +46,7 @@
 			min-width: 300px;
 			display: grid;
 			gap: calc(var(--pico-spacing) / 2);
+			grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 		}
 	}
 </style>

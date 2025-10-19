@@ -18,7 +18,7 @@
 		<ul><li><a href={resolve('/')}>Set Solver</a></li></ul>
 		{#if user}
 			<ul>
-				<li>Signed in as <a class="secondary" href={resolve('/profile')}>{user.email}</a></li>
+				<li><a class="secondary" href={resolve('/profile')}>Profile</a></li>
 				<li>
 					<form {...signOut}>
 						<button class="secondary outline">Sign out</button>
