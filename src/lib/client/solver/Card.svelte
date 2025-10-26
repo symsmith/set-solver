@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Setting from '$lib/client/solver/Setting.svelte';
 	import {
 		getNextColor,
 		getNextCount,
@@ -7,18 +6,22 @@
 		getNextShape
 	} from '$lib/client/solver/solve';
 	import type { Card } from '$lib/shared/types/solver';
+	import Palette from 'phosphor-svelte/lib/Palette';
+	import Pencil from 'phosphor-svelte/lib/Pencil';
+	import PlusMinus from 'phosphor-svelte/lib/PlusMinus';
+	import Shapes from 'phosphor-svelte/lib/Shapes';
 
 	const {
 		card,
 		onchange,
+		index,
 		highlighted = false
 	}: {
 		card: Card;
 		onchange?: (newCard: Card) => void;
+		index?: number;
 		highlighted?: boolean;
 	} = $props();
-
-	let showSettings = $state(false);
 
 	const shape = $derived(
 		card.shape === 'pill' ? 'oval' : card.shape === 'wave' ? 'squiggle' : card.shape
@@ -31,44 +34,42 @@
 	const imgUrl = $derived(`https://smart-games.org/images/${shape}_${filling}_${color}.png`);
 </script>
 
-{#if showSettings}
-	<div class="card" data-settings={showSettings} data-highlighted={highlighted}>
-		<button class="close" type="button" onclick={() => (showSettings = false)}>done</button>
-		<Setting
-			label="Count"
-			current={card.count}
-			onchange={() => onchange?.({ ...card, count: getNextCount(card.count) })}
-		/>
-		<Setting
-			label="Color"
-			current={card.color}
-			onchange={() => onchange?.({ ...card, color: getNextColor(card.color) })}
-		/>
-		<Setting
-			label="Shape"
-			current={card.shape}
-			onchange={() => onchange?.({ ...card, shape: getNextShape(card.shape) })}
-		/>
-		<Setting
-			label="Filling"
-			current={card.filling}
-			onchange={() => onchange?.({ ...card, filling: getNextFilling(card.filling) })}
-		/>
-	</div>
-{:else}
-	<button
-		class="card"
-		type="button"
-		onclick={() => (showSettings = true)}
-		data-settings={showSettings}
-		disabled={!onchange}
-		data-highlighted={highlighted}
-	>
-		{#each { length: card.count } as _, i (i)}
-			<img src={imgUrl} alt="{card.color} {card.filling} {card.shape}" />
-		{/each}
-	</button>
-{/if}
+<div class="card" data-highlighted={highlighted}>
+	{#if index != undefined}
+		<span class="index">#{index}</span>
+	{/if}
+	{#each { length: card.count } as _, i (i)}
+		<img src={imgUrl} alt="{card.color} {card.filling} {card.shape}" />
+	{/each}
+	{#if onchange}
+		<div class="settings">
+			<button
+				title="Shape"
+				onclick={() => onchange?.({ ...card, shape: getNextShape(card.shape) })}
+			>
+				<Shapes />
+			</button>
+			<button
+				title="Color"
+				onclick={() => onchange?.({ ...card, color: getNextColor(card.color) })}
+			>
+				<Palette />
+			</button>
+			<button
+				title="Fill"
+				onclick={() => onchange?.({ ...card, filling: getNextFilling(card.filling) })}
+			>
+				<Pencil />
+			</button>
+			<button
+				title="Count"
+				onclick={() => onchange?.({ ...card, count: getNextCount(card.count) })}
+			>
+				<PlusMinus />
+			</button>
+		</div>
+	{/if}
+</div>
 
 <style>
 	.card {
@@ -84,33 +85,35 @@
 		padding: 15% 10%;
 		gap: calc(var(--pico-spacing) / 2);
 		border: solid 1px var(--pico-secondary);
-
-		&[disabled] {
-			opacity: 1;
-			cursor: default;
-		}
+		position: relative;
 
 		&[data-highlighted='true'] {
 			outline: 2px solid var(--pico-primary);
 			outline-offset: 2px;
 		}
 
-		&[data-settings='true'] {
-			padding: 5%;
-			gap: calc(var(--pico-spacing) / 4);
-			position: relative;
+		.index {
+			position: absolute;
+			top: 0;
+			left: calc(var(--pico-spacing) / 4);
+			color: var(--pico-secondary);
+		}
 
-			.close {
-				position: absolute;
-				right: 0.3rem;
-				top: 0.3rem;
-				padding: 0;
-				padding-inline: 3px;
+		.settings {
+			position: absolute;
+			bottom: 0;
+			display: flex;
+			width: 100%;
+			justify-content: space-evenly;
+			padding: 0.2rem 0;
+
+			button {
 				background-color: white;
-				border: none;
+				padding: 0;
 				color: var(--pico-primary);
-				font-size: 0.6rem;
-				box-shadow: 0 0 0 1px var(--pico-secondary);
+				line-height: 1;
+				border: none;
+				touch-action: manipulation;
 			}
 		}
 	}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { dev } from '$app/environment';
 	import { solve as baseSolve } from '$lib/api/solver.remote';
 	import Form from '$lib/client/form/Form.svelte';
 	import FormCard from '$lib/client/form/FormCard.svelte';
@@ -9,9 +10,22 @@
 	setSolverContext(new Solver());
 
 	const solve = $derived(baseSolve.for(getSolverContext().formId));
+
+	let seeFakeResult = $state(false);
 </script>
 
-{#if solve.result?.success}
+{#if dev}
+	<button class="secondary" type="button" onclick={() => (seeFakeResult = !seeFakeResult)}>
+		Toggle fake result
+	</button>
+{/if}
+
+{#if seeFakeResult}
+	{@const {default:fakeResult} = await import("./fakeResult.json") as {
+		default: NonNullable<NonNullable<typeof solve.result>["success"]>
+	}}
+	<Result cards={fakeResult.cards} image={fakeResult.image} />
+{:else if solve.result?.success}
 	<Result cards={solve.result.success.cards} image={solve.result.success.image} />
 {:else}
 	<FormCard>
