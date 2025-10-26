@@ -6,6 +6,10 @@
 	import { signupFormSchema } from '$lib/shared/schemas/auth';
 </script>
 
+<svelte:head>
+	<title>Sign up - Set Solver</title>
+</svelte:head>
+
 <FormCard>
 	<h1>Welcome!</h1>
 	<Form form={signUp} schema={signupFormSchema}>

@@ -8,6 +8,10 @@
 	const user = $derived((await getUser())!);
 </script>
 
+<svelte:head>
+	<title>Profile - Set Solver</title>
+</svelte:head>
+
 <FormCard>
 	<h1>Update your info</h1>
 	<Form form={updateUser} schema={updateUserFormSchema}>
