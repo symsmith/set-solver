@@ -31,6 +31,7 @@ export async function formatImage(buffer: Uint8Array) {
 			width: 500,
 			withoutEnlargement: true
 		})
+		.rotate()
 		.toBuffer();
 }
 

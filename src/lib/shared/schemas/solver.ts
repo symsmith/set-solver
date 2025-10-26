@@ -14,3 +14,11 @@ export const setDescriptionSchema = v.object({
 	shape: v.union([v.literal('pill'), v.literal('diamond'), v.literal('wave')]),
 	filling: v.union([v.literal('full'), v.literal('striped'), v.literal('empty')])
 });
+
+export const setDescriptionGenerationSchema = v.union([
+	v.array(setDescriptionSchema),
+	v.object({
+		type: v.literal('error'),
+		reason: v.literal('NOT_CARDS')
+	})
+]);
