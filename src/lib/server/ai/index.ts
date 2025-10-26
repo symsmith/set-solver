@@ -1,11 +1,11 @@
-import { MISTRAL_API_KEY } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import { setDescriptionGenerationSchema } from '$lib/shared/schemas/solver';
 import { createMistral } from '@ai-sdk/mistral';
 import { valibotSchema } from '@ai-sdk/valibot';
 import { generateObject, generateText, NoObjectGeneratedError } from 'ai';
 
 const mistral = createMistral({
-	apiKey: MISTRAL_API_KEY
+	apiKey: env.MISTRAL_API_KEY
 });
 
 const visionProvider = mistral('pixtral-large-latest');
