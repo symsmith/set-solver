@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { getUser, signOut } from '$lib/api/auth.remote';
-	import favicon from '$lib/assets/favicon.svg';
+	import appleTouchIconPNG from '$lib/assets/apple-touch-icon.png';
+	import favicon96PNG from '$lib/assets/favicon-96x96.png';
+	import faviconICO from '$lib/assets/favicon.ico';
+	import faviconSVG from '$lib/assets/favicon.svg';
 	import '$lib/assets/pico.violet.min.css';
 
 	let { children } = $props();
@@ -10,7 +13,12 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" type="image/png" href={favicon96PNG} sizes="96x96" />
+	<link rel="icon" type="image/svg+xml" href={faviconSVG} />
+	<link rel="shortcut icon" href={faviconICO} />
+	<link rel="apple-touch-icon" sizes="180x180" href={appleTouchIconPNG} />
+	<meta name="apple-mobile-web-app-title" content="Set Solver" />
+	<link rel="manifest" href="/site.webmanifest" />
 </svelte:head>
 
 <div class="container">

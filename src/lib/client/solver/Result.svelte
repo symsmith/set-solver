@@ -22,24 +22,6 @@
 	}}>Upload another game</button
 >
 
-<article>
-	<h1>Are all the cards there? <small>Click on the cards to fix issues</small></h1>
-	<div class="comparison">
-		<div class="image">
-			<img src="data:image/png;base64,{image}" alt="" />
-		</div>
-		<div class="cards">
-			{#each cards as card, i}
-				{@const isHighlighted =
-					!!highlightedSet &&
-					isSetInCards(highlightedSet, cards) &&
-					!!findCard(card, highlightedSet)}
-				<Card {card} onchange={(card) => (cards[i] = card)} highlighted={isHighlighted} />
-			{/each}
-		</div>
-	</div>
-</article>
-
 <article class="result">
 	<h1>
 		{#if sets.length}
@@ -66,6 +48,24 @@
 			{/each}
 		</ul>
 	{/if}
+</article>
+
+<article>
+	<h1>Are all the cards there? <small>Click on the cards to fix issues</small></h1>
+	<div class="comparison">
+		<div class="image">
+			<img src="data:image/png;base64,{image}" alt="The uploaded file" />
+		</div>
+		<div class="cards">
+			{#each cards as card, i}
+				{@const isHighlighted =
+					!!highlightedSet &&
+					isSetInCards(highlightedSet, cards) &&
+					!!findCard(card, highlightedSet)}
+				<Card {card} onchange={(card) => (cards[i] = card)} index={i} highlighted={isHighlighted} />
+			{/each}
+		</div>
+	</div>
 </article>
 
 <style>

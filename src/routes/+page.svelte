@@ -6,6 +6,10 @@
 	const user = $derived(await getUser());
 </script>
 
+<svelte:head>
+	<title>Set Solver</title>
+</svelte:head>
+
 {#if user}
 	<Solver />
 {:else}
