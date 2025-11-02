@@ -75,6 +75,7 @@
 	.card {
 		margin: 0;
 		aspect-ratio: 2 / 3;
+		overflow: hidden;
 		background-color: white;
 		border-radius: var(--pico-border-radius);
 		display: flex;
