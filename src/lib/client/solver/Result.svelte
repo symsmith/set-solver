@@ -22,33 +22,43 @@
 	}}>Upload another game</button
 >
 
-<article class="result">
-	<h1>
+<details>
+	<!-- svelte-ignore a11y_no_redundant_roles -->
+	<summary role="button">
 		{#if sets.length}
-			{sets.length} set{sets.length > 1 ? 's' : ''} found
-			<small>Click to highlight in the game</small>
+			One or more sets found!
 		{:else}
 			No set found
 		{/if}
-	</h1>
-	{#if sets.length}
-		<ul>
-			{#each sets as set}
-				{@const isSelected = highlightedSet && isSameSet(set, highlightedSet)}
-				<li>
-					<button
-						onclick={() => (highlightedSet = isSelected ? null : set)}
-						data-selected={isSelected}
-					>
-						{#each set.sort((a, b) => a.count - b.count) as card}
-							<Card {card} />
-						{/each}
-					</button>
-				</li>
-			{/each}
-		</ul>
-	{/if}
-</article>
+	</summary>
+	<article class="result">
+		<h1>
+			{#if sets.length}
+				{sets.length} set{sets.length > 1 ? 's' : ''} found
+				<small>Click to highlight in the game</small>
+			{:else}
+				No set found
+			{/if}
+		</h1>
+		{#if sets.length}
+			<ul>
+				{#each sets as set}
+					{@const isSelected = highlightedSet && isSameSet(set, highlightedSet)}
+					<li>
+						<button
+							onclick={() => (highlightedSet = isSelected ? null : set)}
+							data-selected={isSelected}
+						>
+							{#each set.sort((a, b) => a.count - b.count) as card}
+								<Card {card} />
+							{/each}
+						</button>
+					</li>
+				{/each}
+			</ul>
+		{/if}
+	</article>
+</details>
 
 <article>
 	<h1>Are all the cards there? <small>Click on the cards to fix issues</small></h1>
