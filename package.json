@@ -40,6 +40,7 @@
 		"vite": "^7.1.12"
 	},
 	"dependencies": {
+		"@ai-sdk/google": "^2.0.26",
 		"@ai-sdk/mistral": "^2.0.22",
 		"@ai-sdk/valibot": "^1.0.15",
 		"@libsql/client": "^0.15.15",

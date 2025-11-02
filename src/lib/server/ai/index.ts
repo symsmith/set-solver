@@ -1,5 +1,6 @@
 import { env } from '$env/dynamic/private';
 import { setDescriptionGenerationSchema } from '$lib/shared/schemas/solver';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createMistral } from '@ai-sdk/mistral';
 import { valibotSchema } from '@ai-sdk/valibot';
 import { generateObject, generateText, NoObjectGeneratedError } from 'ai';
@@ -7,8 +8,11 @@ import { generateObject, generateText, NoObjectGeneratedError } from 'ai';
 const mistral = createMistral({
 	apiKey: env.MISTRAL_API_KEY
 });
+const google = createGoogleGenerativeAI({
+	apiKey: env.GEMINI_API_KEY
+});
 
-const visionProvider = mistral('pixtral-large-latest');
+const visionProvider = google('gemini-2.5-flash');
 const objectProvider = mistral('mistral-large-latest');
 
 async function retryGeneration<T>(fn: () => Promise<T>, maxRetries = 2) {
