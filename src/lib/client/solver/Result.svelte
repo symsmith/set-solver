@@ -62,7 +62,12 @@
 					!!highlightedSet &&
 					isSetInCards(highlightedSet, cards) &&
 					!!findCard(card, highlightedSet)}
-				<Card {card} onchange={(card) => (cards[i] = card)} index={i} highlighted={isHighlighted} />
+				<Card
+					{card}
+					onchange={(card) => (cards[i] = card)}
+					index={i + 1}
+					highlighted={isHighlighted}
+				/>
 			{/each}
 		</div>
 	</div>
